@@ -1,3 +1,5 @@
+#main file which compiles scores for all stocks
+
 import yfinance as yf
 import GrowthEstimateScraper
 import SentimentAnalysis
@@ -51,6 +53,7 @@ allStocks = [basicMaterials,
              telecommunications,
              utilities]
 
+#CALCULATES THE VALUE SCORE FOR A STOCK
 def calcScoreValue(ticker):
     print('Calculating value score...')
 
@@ -61,7 +64,6 @@ def calcScoreValue(ticker):
     try:
         stock = yf.Ticker(ticker)
         info = stock.info
-        print(stock.info)
         assert(len(info) > 10)
     except:
         print('error with retrieving ticker')
@@ -108,8 +110,6 @@ def calcScoreValue(ticker):
     except:
         print('error with current ratio')
         currentRatio = 0
-    #fiveYearAveDividendYield = info['fiveYearAvgDividendYield']
-    #need something to show years of consecutive dividend payments
 
     if not passCriteria:
         print('failed criteria')
@@ -119,6 +119,7 @@ def calcScoreValue(ticker):
     score = forwardPE + priceToBook + dividendYeild + currentRatio
     return score
 
+#CALCULATES THE GROWTH SCORE FOR A STOCK
 def calcScoreGrowth(ticker):
     print('Calculating growth score...')
     score = 0
@@ -145,8 +146,6 @@ def calcScoreGrowth(ticker):
         if CalcGrowth < 15: passCriteria = False
         forcastedGrowth = 40*min(1+CalcGrowth/100, 1.7)**5
         print('forcastedGrowth', CalcGrowth)
-        #print('forwardEPS', info["forwardEPS"])
-        #print('trailingEPS', info["trailingEPS"])
     except:
         print('error with forcastedGrowth')
         forcastedGrowth = 0
@@ -182,7 +181,8 @@ def calcTechnicalScore(ticker):
     except:
         print('error with retrieving ticker')
         return -1
-
+    
+    #CALCULATES SCORE FOR EACH METRIC
     try:
         twoHundredDayAverage = info["twoHundredDayAverage"]
         fiftyDayAverage = info["fiftyDayAverage"]
@@ -205,11 +205,6 @@ def calcTechnicalScore(ticker):
 
     score = momentum + sentimentScore
     return score
-
-
-
-#"C:\AaravWorld\code\Python\Python38\SentimentAnalysisStockScraper.py"
-#https://towardsdatascience.com/sentiment-analysis-of-stocks-from-financial-news-using-python-82ebdcefb638
 
 stockScores = {}
 
