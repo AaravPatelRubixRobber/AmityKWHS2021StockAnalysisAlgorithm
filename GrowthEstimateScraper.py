@@ -16,19 +16,18 @@ def parse_html_table(table):
     n_rows = 0
     column_names = []
 
-    # Find number of rows and columns
-    # we also find the column titles if we can
+    # FIND NUMBER OF ROWS AND COLUMNS
     for row in table.find_all('tr'):
 
-        # Determine the number of rows in the table
+        # DETERMINE NUMBER OF ROWS
         td_tags = row.find_all('td')
         if len(td_tags) > 0:
             n_rows += 1
             if n_columns == 0:
-                # Set the number of columns for our table
+                # DETERMINE NUMBER OF COLUMNS
                 n_columns = len(td_tags)
 
-        # Handle column names if we find them
+        # HANDLE COLUMN NAMES
         th_tags = row.find_all('th')
         if len(th_tags) > 0 and len(column_names) == 0:
             for th in th_tags:
@@ -37,7 +36,7 @@ def parse_html_table(table):
     if 'Invalid Date' in column_names:
         return pd.DataFrame(columns=column_names)
 
-    # Safeguard on Column Titles
+    # CHECKS IF COLUMN ATTRIBUTES ARE VALID
     if len(column_names) > 0 and len(column_names) != n_columns:
         raise Exception("Column titles do not match the number of columns")
 
@@ -54,7 +53,7 @@ def parse_html_table(table):
         if len(columns) > 0:
             row_marker += 1
 
-    # Convert to float if possible
+    # CONVERTS TO FLOAT
     for col in df:
         try:
             df[col] = df[col].astype(float)
@@ -62,13 +61,12 @@ def parse_html_table(table):
             pass
     return df
 
-
+#MAIN CODE TO GET GROWTH RATE
 def getLTGrowthRate(stock):
     url = 'https://ca.finance.yahoo.com/quote/{s}/analysts?p={s}'.format(s=stock)
-    #if verbose: print('Parsing', url)
     headers = {'User-Agent': user_agent}
 
-    req = urllib2.Request(url, None, headers)  # The assembled request
+    req = urllib2.Request(url, None, headers)
     response = urllib2.urlopen(req)
     content = response.read()
 
@@ -79,14 +77,7 @@ def getLTGrowthRate(stock):
 
         if df.columns.values[0] == 'Growth Estimates':
             stk = df[df['Growth Estimates'] == 'Next 5 Years (per annum)'][stock].values[0].replace('%', '')
-            #ind = df[df['Growth Estimates'] == 'Next 5 Years (per annum)']['Industry'].values[0].replace('%', '')
-            #sec = df[df['Growth Estimates'] == 'Next 5 Years (per annum)']['Sector'].values[0].replace('%', '')
-            #sp500 = df[df['Growth Estimates'] == 'Next 5 Years (per annum)']['S&P 500'].values[0].replace('%', '')
 
             LTGrowthRate = stk if stk != 'N/A' else 5.0
-            #if ind != 'N/A':
-            #    LTGrowthRate = min(LTGrowthRate, np.float(ind))
-            #if sec != 'N/A':
-            #    LTGrowthRate = min(LTGrowthRate, np.float(sec))
 
     return LTGrowthRate
