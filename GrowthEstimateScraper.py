@@ -1,10 +1,8 @@
-import numpy as np
 import pandas as pd
 
 import urllib.request as urllib2
 from bs4 import BeautifulSoup, Tag
 
-import sys
 
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 
@@ -16,18 +14,19 @@ def parse_html_table(table):
     n_rows = 0
     column_names = []
 
-    # FIND NUMBER OF ROWS AND COLUMNS
+    # Find number of rows and columns
+    # we also find the column titles if we can
     for row in table.find_all('tr'):
 
-        # DETERMINE NUMBER OF ROWS
+        # Determine the number of rows in the table
         td_tags = row.find_all('td')
         if len(td_tags) > 0:
             n_rows += 1
             if n_columns == 0:
-                # DETERMINE NUMBER OF COLUMNS
+                # Set the number of columns for our table
                 n_columns = len(td_tags)
 
-        # HANDLE COLUMN NAMES
+        # Handle column names if we find them
         th_tags = row.find_all('th')
         if len(th_tags) > 0 and len(column_names) == 0:
             for th in th_tags:
@@ -36,7 +35,7 @@ def parse_html_table(table):
     if 'Invalid Date' in column_names:
         return pd.DataFrame(columns=column_names)
 
-    # CHECKS IF COLUMN ATTRIBUTES ARE VALID
+    # Safeguard on Column Titles
     if len(column_names) > 0 and len(column_names) != n_columns:
         raise Exception("Column titles do not match the number of columns")
 
@@ -53,7 +52,7 @@ def parse_html_table(table):
         if len(columns) > 0:
             row_marker += 1
 
-    # CONVERTS TO FLOAT
+    # Convert to float if possible
     for col in df:
         try:
             df[col] = df[col].astype(float)
@@ -61,12 +60,13 @@ def parse_html_table(table):
             pass
     return df
 
-#MAIN CODE TO GET GROWTH RATE
+
 def getLTGrowthRate(stock):
     url = 'https://ca.finance.yahoo.com/quote/{s}/analysts?p={s}'.format(s=stock)
+    #if verbose: print('Parsing', url)
     headers = {'User-Agent': user_agent}
 
-    req = urllib2.Request(url, None, headers)
+    req = urllib2.Request(url, None, headers)  # The assembled request
     response = urllib2.urlopen(req)
     content = response.read()
 
