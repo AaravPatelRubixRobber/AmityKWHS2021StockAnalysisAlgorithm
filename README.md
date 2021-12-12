@@ -20,8 +20,8 @@ The growth score asseses a company's ability to grow revenues over the long-term
   - return on equity
   - current ratio
 
-Finally, the technical score asseses a company's short term situation. It uses trading indicators and company news to predict a stock's short-term movements. Some metrics used to calculate this are:
+Finally, the technical score asseses a company's mid-term situation. It uses trading indicators and company news to predict a stock's short-term movements. Some metrics used to calculate this are:
   - MACD (200 MA long-term, 500 MA short-term)
-  - sentiment
+  - NLP news sentiment surrounding a company
 
-These scores are used to identify leading stocks in varous industries, and they are used in conjuction with discretionary analysis to select our investments.
+These scores are used to identify leading stocks in various industries, and they are used in conjuction with discretionary analysis to select our investments.
