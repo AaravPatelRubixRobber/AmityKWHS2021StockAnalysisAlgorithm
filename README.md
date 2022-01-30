@@ -26,7 +26,7 @@ The growth score looks at a company's valuation in relation to its ability to gr
   - debt to equity
   - insider ownership
 
-These metrics are plugged into an equation to calculate a stock's value and growth scores. More relevant metrics, such as the p/e ratio for value companies or forcasted growth for growth companies, have much more weight than less relevant ones. A score is calculated for all available stocks for the KWHS Investing Competition. The program then filters out the top 20% of growth and value stocks for each sector, and exports this to a spreadsheet. The spreadsheet is attached to this Github repo.
+These metrics are plugged into an equation to calculate a stock's value and growth scores. More relevant metrics, such as the p/e ratio for value companies or forcasted growth for growth companies, have much more weight than less relevant ones. A score is calculated for all available stocks for the KWHS Investing Competition. The program then filters out the top 20% of growth and value stocks for each sector, and exports this to a spreadsheet.
 
 The technical score asseses a company's mid-term situation. It uses trading indicators and company news to predict a stock's short-term movements. Some metrics used to calculate this are:
   - MACD (200 MA long-term, 500 MA short-term)
